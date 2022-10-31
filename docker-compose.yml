@@ -19,9 +19,12 @@ services:
   mysql-db:
     image: mysql:5.7
     restart: always
+    container_name: mysql-db
     environment:
       MYSQL_ROOT_PASSWORD: prisma
     volumes:
       - mysql:/var/lib/mysql
+    ports:
+      - "3306:3306"
 volumes:
   mysql: ~
