@@ -1,27 +1,36 @@
-import { handleClientScriptLoad } from "next/script";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import {gql, useQuery} from "@apollo/client";
+import Head from 'next/head'
 
+const AllBalancesQuery = gql`
+    query{
+        balances{
+            id
+            balance
+        }
+    }
+`;
 
 function BalancePage() {
-    const [balance, setBalance] = useState(0);
+    const {data, loading, error} = useQuery(AllBalancesQuery);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        console.log('this is balance' + balance);
-        
-        console.log(e.currentTarget.balance.value);
-        
-    }
+    if(loading) return <p>loading.....</p>
 
-    return <>
-        <form action="" onSubmit={handleSubmit} >
-            <input name='balance' id="balance" value={balance}  type="number" 
-            onChange={(e) => setBalance(parseInt(e.target.value))} />
-            <button type="submit">submit</button>
-        </form>
+    if(error) return <p>erororr {error.message}</p>
 
-    </>
+    
+
+    return <div>
+        {data.balances.map(balance => {
+            return(
+            <ul>
+                <li>{balance.id}</li>
+                <li>{balance.balance}</li>
+            </ul>
+            )
+        })}
+    </div>
 }
 
 export default BalancePage;
+
 
