@@ -12,6 +12,12 @@ const AllBalancesQuery = gql`
     }
 `;
 
+type BalanceType = {
+    id: String,
+    title: String,
+    balance: number
+}
+
 function BalancesPage() {
     const {data, loading, error} = useQuery(AllBalancesQuery);
 
@@ -22,13 +28,16 @@ function BalancesPage() {
     
 
     return <div>
-        {data.balances.map((balance: { id: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; balance: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; title: string | number | boolean | ReactElement<any, string | JSXElementConstructor<any>> | ReactFragment | ReactPortal | null | undefined; }) => {
+        {data.balances.map((balance: BalanceType) => {
             return(
-            <ul>
-                <li>{balance.id}</li>
-                <li>{balance.balance}</li>
-                <li>{balance.title}</li>
-            </ul>
+                <div className="card" style={{width: '18rem'}}>
+                <div className="card-body">
+                  <h5 className="card-title">{balance.title}</h5>
+                  <h6 className="card-subtitle mb-2 text-muted">Balance amount: {balance.balance}</h6>
+                  <p className="card-text">Description</p>
+                  <button className="btn btn-success">Go to list</button>
+                </div>
+              </div>
             )
         })}
     </div>
