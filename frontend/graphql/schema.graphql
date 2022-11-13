@@ -5,6 +5,7 @@
 type Balance {
   balance: Int
   id: String
+  title: String
 }
 
 type Query {
