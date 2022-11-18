@@ -9,5 +9,6 @@ type Balance {
 }
 
 type Query {
+  balance(id: String!): Balance!
   balances: [Balance]!
 }
