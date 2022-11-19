@@ -14,4 +14,14 @@ model Balances{
   id String @id @default(cuid())
   title String
   balance Int
+  fields Field[]
+}
+
+model Field{
+  id String @id @default(cuid())
+  name String
+  value Int
+  plusOrMinus Boolean
+  balance Balances @relation(fields: [balanceId], references: [id])
+  balanceId String
 }

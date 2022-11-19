@@ -1,7 +1,11 @@
 
 export const resolvers = {
     BalancesQuery: {
-        balances: async (_parent, _args, context) => await context.prisma.balances.findMany(),
+        balances: async (_parent, _args, context) => await context.prisma.balances.findMany({
+            include: {
+                fields: true
+            }
+        }),
     },
 
     BalanceById: {        
@@ -10,6 +14,5 @@ export const resolvers = {
                 id: args.id
             }
         })
-        
     }
 }

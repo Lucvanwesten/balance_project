@@ -4,8 +4,16 @@
 
 type Balance {
   balance: Int
+  fields: [Field]
   id: String
   title: String
+}
+
+type Field {
+  id: String
+  name: String
+  plusOrMinus: Boolean
+  value: Int
 }
 
 type Query {
