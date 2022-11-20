@@ -47,7 +47,6 @@ export const BalanceByIdQuery = extendType({
                 id: nonNull(stringArg())
             },
             resolve(_parent, args, context) {
-                console.log(args.id);
                 return resolvers.BalanceById.balance(_parent, args, context);
             }
         })
