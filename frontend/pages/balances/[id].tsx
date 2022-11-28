@@ -45,15 +45,28 @@ function BalancePage() {
     const [title, setTitle] = useState('');
     const [fields, setFields] = useState<Field[]>([]);
     const [inputName, setInputName] = useState('');
+    const [balanceId, setBalanceId] = useState<String>();
+    const [remaining, setRemaining] = useState(0);
 
     const router = useRouter();
-    const { id } = router.query;
+    useEffect(() => {
+        if (router.query.id) {
+            setBalanceId(router.query.id as String);
+        }
+    }, [router.query.id]);
 
     const { data, loading, error } = useQuery(BalanceByIdQuery, {
         variables: {
-            id: id
-        }
+            id: balanceId
+        },
+        pollInterval: 5000
     });
+
+    useEffect(() => {
+        setBudget(data?.balance.balance);
+        setTitle(data?.balance.title);
+        setFields(data?.balance.fields);
+      }, [data])
 
     const handleFieldSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -65,16 +78,26 @@ function BalancePage() {
         }
 
         setFields([...fields, newField]);
+        setInputName('');
     }
 
-    useEffect(() => {
-      setBudget(data?.balance.balance);
-      setTitle(data?.balance.title);
-      setFields(data?.balance.fields);
-    }, [data])
+    
 
     const updateFields = (id: string, name: string, value: number, plusOrMinus: boolean) => {
         setFields(fields => fields.filter(field => field.id !== id));
+    }
+
+    const handeCalculation = (e: React.MouseEvent) => {
+        console.log('clicked', fields);
+        let newTotal = 0;
+        fields.forEach(field => {
+            if (field.plusOrMinus) {
+                newTotal -= field.value;
+            } else {
+                newTotal += field.value;
+            }
+            setRemaining(budget - newTotal);
+        });
     }
 
     
@@ -86,7 +109,7 @@ function BalancePage() {
             <div className="col-md-auto">
                 <div className="shadow p-3 mb-5 bg-white rounded align-items-center">
                     <h3 className="d-flex justify-content-center">{title || ''}</h3>
-                    <h1>//balance</h1>
+                    <h1 className="d-flex justify-content-center">{remaining}</h1>
                     <form>
                         <div className="form-group">
                             <label htmlFor="balance"><h6>Budget</h6></label>
@@ -111,6 +134,7 @@ function BalancePage() {
                             className="form-control" 
                             name="name" 
                             placeholder="Enter name" 
+                            value={inputName}
                             onChange={(e) => setInputName(e.target.value)}/>
                             <div className="input-group-append">
                                 <button className="btn btn-success" type="submit">Add Field</button>
@@ -120,10 +144,17 @@ function BalancePage() {
                 </div>
             </div>
         </div>
+        <div className="row justify-content-md-center mt-3">
         {fields && fields.map((field: Field, index: number) => {
             return <InputField key={index} updateFields={updateFields} {...field} />
         }
         )}
+        </div>
+        <div className="row justify-content-md-center mt-3">
+            <div className="col-md-auto">
+            <button className="btn btn-primary" onClick={handeCalculation}>Calculate</button>
+            </div>
+        </div>
     </div>
 
 }

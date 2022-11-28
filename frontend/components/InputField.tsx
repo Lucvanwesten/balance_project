@@ -11,8 +11,7 @@ function InputField({ updateFields, id, name, value, plusOrMinus }) {
 
 
 
-   return <div className="row justify-content-md-center mt-3">
-      <div className="col-md-auto">
+   return <div className="col-md-auto">
          <div className="shadow p-3 mb-5 bg-white rounded align-items-center">
             <div className="row justify-content-center">
                <div className="col-md-auto">
@@ -36,7 +35,6 @@ function InputField({ updateFields, id, name, value, plusOrMinus }) {
          </div>
          </div>
       </div>
-   </div>
 }
 
 export default InputField;
